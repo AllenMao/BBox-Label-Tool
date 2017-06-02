@@ -1,8 +1,9 @@
 #-------------------------------------------------------------------------------
 # Name:        Object bounding box label tool
 # Purpose:     Label object bboxes for ImageNet Detection data
-# Author:      Qiushi
-# Created:     06/06/2014
+# Author:      Swall0w
+# Modified:     01/06/2017
+# I sincerely respect Quishi
 
 #
 #-------------------------------------------------------------------------------
