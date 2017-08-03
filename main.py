@@ -178,30 +178,55 @@ class LabelTool():
         # load labels
         self.clearBBox()
         self.imagename = os.path.split(imagepath)[-1].split('.')[0]
-        labelname = self.imagename + '.txt'
+        #labelname = self.imagename + '.txt'
+        labelname = self.imagename + '.xml'
         self.labelfilename = os.path.join(self.outDir, labelname)
         bbox_cnt = 0
+        print(self.labelfilename)
         if os.path.exists(self.labelfilename):
             with open(self.labelfilename) as f:
-                for (i, line) in enumerate(f):
-                    if i == 0:
-                        bbox_cnt = int(line.strip())
-                        continue
-                    tmp = [int(t.strip()) for t in line.split()]
-                    self.bboxList.append(tuple(tmp))
-                    tmpId = self.mainPanel.create_rectangle(tmp[0], tmp[1], \
-                                                            tmp[2], tmp[3], \
+                tree = ET.parse(f)
+                xmlroot = tree.getroot()
+                size = xmlroot.find('size')
+                width = int(size.find('width').text)
+                height = int(size.find('height').text)
+
+                for obj in xmlroot.iter('object'):
+                    cls = obj.find('name').text
+                    xmlbox = obj.find('bndbox')
+                    bbox = (float(xmlbox.find('xmin').text),
+                            float(xmlbox.find('ymin').text),
+                            float(xmlbox.find('xmax').text),
+                            float(xmlbox.find('ymax').text)
+                            )
+                    self.bboxList.append(bbox)
+                    tmpId = self.mainPanel.create_rectangle(bbox[0], bbox[1], \
+                                                            bbox[2], bbox[3], \
                                                             width = 2, \
                                                             outline = COLORS[(len(self.bboxList)-1) % len(COLORS)])
                     self.bboxIdList.append(tmpId)
-                    self.listbox.insert(END, '(%d, %d) -> (%d, %d)' %(tmp[0], tmp[1], tmp[2], tmp[3]))
+                    self.listbox.insert(END, '(%d, %d) -> (%d, %d)' %(bbox[0], bbox[1], bbox[2], bbox[3]))
                     self.listbox.itemconfig(len(self.bboxIdList) - 1, fg = COLORS[(len(self.bboxIdList) - 1) % len(COLORS)])
+#                for (i, line) in enumerate(f):
+#                    if i == 0:
+#                        bbox_cnt = int(line.strip())
+#                        continue
+#                    tmp = [int(t.strip()) for t in line.split()]
+#                    self.bboxList.append(tuple(tmp))
+#                    tmpId = self.mainPanel.create_rectangle(tmp[0], tmp[1], \
+#                                                            tmp[2], tmp[3], \
+#                                                            width = 2, \
+#                                                            outline = COLORS[(len(self.bboxList)-1) % len(COLORS)])
+#                    self.bboxIdList.append(tmpId)
+#                    self.listbox.insert(END, '(%d, %d) -> (%d, %d)' %(tmp[0], tmp[1], tmp[2], tmp[3]))
+#                    self.listbox.itemconfig(len(self.bboxIdList) - 1, fg = COLORS[(len(self.bboxIdList) - 1) % len(COLORS)])
 
     def saveImage(self):
-        with open(self.labelfilename, 'w') as f:
-            f.write('%d\n' %len(self.bboxList))
-            for bbox in self.bboxList:
-                f.write(' '.join(map(str, bbox)) + '\n')
+        pass
+#        with open(self.labelfilename, 'w') as f:
+#            f.write('%d\n' %len(self.bboxList))
+#            for bbox in self.bboxList:
+#                f.write(' '.join(map(str, bbox)) + '\n')
         print(('Image No. {0} saved'.format(self.cur)))
 
 
