@@ -42,6 +42,7 @@ class LabelTool():
         self.imagename = ''
         self.labelfilename = ''
         self.tkimg = None
+        self.classcandidate_filename = 'class.names'
 
         # initialize mouse state
         self.STATE = {}
@@ -207,19 +208,6 @@ class LabelTool():
                     self.bboxIdList.append(tmpId)
                     self.listbox.insert(END, '(%d, %d) -> (%d, %d)' %(bbox[0], bbox[1], bbox[2], bbox[3]))
                     self.listbox.itemconfig(len(self.bboxIdList) - 1, fg = COLORS[(len(self.bboxIdList) - 1) % len(COLORS)])
-#                for (i, line) in enumerate(f):
-#                    if i == 0:
-#                        bbox_cnt = int(line.strip())
-#                        continue
-#                    tmp = [int(t.strip()) for t in line.split()]
-#                    self.bboxList.append(tuple(tmp))
-#                    tmpId = self.mainPanel.create_rectangle(tmp[0], tmp[1], \
-#                                                            tmp[2], tmp[3], \
-#                                                            width = 2, \
-#                                                            outline = COLORS[(len(self.bboxList)-1) % len(COLORS)])
-#                    self.bboxIdList.append(tmpId)
-#                    self.listbox.insert(END, '(%d, %d) -> (%d, %d)' %(tmp[0], tmp[1], tmp[2], tmp[3]))
-#                    self.listbox.itemconfig(len(self.bboxIdList) - 1, fg = COLORS[(len(self.bboxIdList) - 1) % len(COLORS)])
 
     def saveImage(self):
         pass
