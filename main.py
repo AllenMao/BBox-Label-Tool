@@ -2,7 +2,7 @@
 # Name:        Object bounding box label tool
 # Purpose:     Label object bboxes for ImageNet Detection data
 # Author:      Swall0w
-# Modified:     01/06/2017
+# Modified:     05/08/2017
 # I sincerely respect Quishi
 
 #
@@ -146,9 +146,6 @@ class LabelTool():
             self.category = int(s)
         else:
             s = r'D:\workspace\python\labelGUI'
-##        if not os.path.isdir(s):
-##            tkMessageBox.showerror("Error!", message = "The specified dir doesn't exist!")
-##            return
         # get image list
         self.imageDir = os.path.join(r'./Images', '%03d' %(self.category))
         self.imageList = [f for f in glob.glob(os.path.join(self.imageDir + '/*')) if ('png'in f or 'jpg' in f)]
@@ -261,12 +258,6 @@ class LabelTool():
         pretty_string = minidom.parseString(string).toprettyxml(indent='  ')
         with open(self.labelfilename,'w') as f:
             f.write(pretty_string)
-#        pass
-
-#        with open(self.labelfilename, 'w') as f:
-#            f.write('%d\n' %len(self.bboxList))
-#            for bbox in self.bboxList:
-#                f.write(' '.join(map(str, bbox)) + '\n')
         print(('Image No. {0} saved'.format(self.cur)))
 
 
