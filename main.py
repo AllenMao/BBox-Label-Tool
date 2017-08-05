@@ -15,6 +15,7 @@ import os
 import glob
 import random
 import xml.etree.ElementTree as ET
+import xml.dom.minidom as minidom
 from tkinter import ttk
 
 # colors for the bboxes
@@ -227,12 +228,29 @@ class LabelTool():
                     self.listbox.itemconfig(len(self.bboxIdList) - 1, fg = COLORS[(len(self.bboxIdList) - 1) % len(COLORS)])
 
     def saveImage(self):
-#        annotation = ET.Elements('annotation')
-#        folder = ET.SubElement(annotation,'folder')
-#        folder.text = self.imageDir
-#        filename = ET.SubElement(annotation,'filename')
-#        filename.text = os.path.split(self.imageList[self.cur - 1])[-1].split('.')[0] + '.jpg'
-        print(self.bboxList)
+        annotation = ET.Element('annotation')
+        folder = ET.SubElement(annotation,'folder')
+        folder.text = self.imageDir
+        filename = ET.SubElement(annotation,'filename')
+        filename.text = os.path.split(self.imageList[self.cur - 1])[-1].split('.')[0] + '.jpg'
+        for bbox in self.bboxList:
+            obj = ET.SubElement(annotation,'object')
+            name = ET.SubElement(obj,'name')
+            name.text = bbox[4]
+            bndbox = ET.SubElement(obj,'bndbox')
+            xmin = ET.SubElement(bndbox,'xmin')
+            xmin.text = str(int(bbox[0]))
+            ymin = ET.SubElement(bndbox,'ymin')
+            ymin.text = str(int(bbox[1]))
+            xmax = ET.SubElement(bndbox,'xmax')
+            xmax.text = str(int(bbox[2]))
+            ymax = ET.SubElement(bndbox,'ymax')
+            ymax.text = str(int(bbox[3]))
+
+        string = ET.tostring(annotation,'utf-8')
+        pretty_string = minidom.parseString(string).toprettyxml(indent='  ')
+        with open(self.labelfilename,'w') as f:
+            f.write(pretty_string)
 #        pass
 
 #        with open(self.labelfilename, 'w') as f:
