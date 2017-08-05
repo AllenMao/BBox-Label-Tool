@@ -4,7 +4,7 @@ BBox-Label-Tool
 A simple tool for labeling object bounding boxes in images, implemented with Python Tkinter.
 
 **Updates:** 
-- 2017.5.21 Check out the ```multi-class``` branch for a multi-class version implemented by @jxgu1016
+- 2017.8.05 multi class, xml dumping
 
 **Screenshot:**
 ![Label Tool](./screenshot.png)
@@ -24,8 +24,11 @@ LabelTool
 
 Dependency
 ----------
-python 2.7 win 32bit
-PIL-1.1.7.win32-py2.7
+python 3.6.1 linux 64bit
+PIL 1.1.7
+Numpy
+tkinter
+xml
 
 Startup
 -------
