@@ -196,7 +196,6 @@ class LabelTool():
         # load labels
         self.clearBBox()
         self.imagename = os.path.split(imagepath)[-1].split('.')[0]
-        #labelname = self.imagename + '.txt'
         labelname = self.imagename + '.xml'
         self.labelfilename = os.path.join(self.outDir, labelname)
         bbox_cnt = 0
@@ -215,7 +214,8 @@ class LabelTool():
                     bbox = (float(xmlbox.find('xmin').text),
                             float(xmlbox.find('ymin').text),
                             float(xmlbox.find('xmax').text),
-                            float(xmlbox.find('ymax').text)
+                            float(xmlbox.find('ymax').text),
+                            cls
                             )
                     self.bboxList.append(bbox)
                     tmpId = self.mainPanel.create_rectangle(bbox[0], bbox[1], \
@@ -227,7 +227,14 @@ class LabelTool():
                     self.listbox.itemconfig(len(self.bboxIdList) - 1, fg = COLORS[(len(self.bboxIdList) - 1) % len(COLORS)])
 
     def saveImage(self):
-        pass
+#        annotation = ET.Elements('annotation')
+#        folder = ET.SubElement(annotation,'folder')
+#        folder.text = self.imageDir
+#        filename = ET.SubElement(annotation,'filename')
+#        filename.text = os.path.split(self.imageList[self.cur - 1])[-1].split('.')[0] + '.jpg'
+        print(self.bboxList)
+#        pass
+
 #        with open(self.labelfilename, 'w') as f:
 #            f.write('%d\n' %len(self.bboxList))
 #            for bbox in self.bboxList:
