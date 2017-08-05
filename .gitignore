@@ -1,0 +1,6 @@
+*.bak
+*.swp
+*.names
+*.txt
+*.xml
+tmp*
