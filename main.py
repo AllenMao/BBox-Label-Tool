@@ -11,6 +11,7 @@
 from tkinter import *
 import tkinter.messagebox
 from PIL import Image, ImageTk
+import numpy as np
 import os
 import glob
 import random
@@ -42,6 +43,7 @@ class LabelTool():
         self.total = 0
         self.category = 0
         self.imagename = ''
+        self.imagesize = ''
         self.labelfilename = ''
         self.tkimg = None
         self.currentLabelclass = ''
@@ -189,6 +191,7 @@ class LabelTool():
         # load image
         imagepath = self.imageList[self.cur - 1]
         self.img = Image.open(imagepath)
+        self.imagesize = np.asarray(self.img).shape
         self.tkimg = ImageTk.PhotoImage(self.img)
         self.mainPanel.config(width = max(self.tkimg.width(), 400), height = max(self.tkimg.height(), 400))
         self.mainPanel.create_image(0, 0, image = self.tkimg, anchor=NW)
@@ -233,6 +236,13 @@ class LabelTool():
         folder.text = self.imageDir
         filename = ET.SubElement(annotation,'filename')
         filename.text = os.path.split(self.imageList[self.cur - 1])[-1].split('.')[0] + '.jpg'
+        size = ET.SubElement(annotation,'size')
+        width = ET.SubElement(size,'width')
+        width.text = str(int(self.imagesize[0]))
+        height = ET.SubElement(size,'height')
+        height.text = str(int(self.imagesize[1]))
+        depth = ET.SubElement(size,'depth')
+        depth.text = str(int(self.imagesize[2]))
         for bbox in self.bboxList:
             obj = ET.SubElement(annotation,'object')
             name = ET.SubElement(obj,'name')
