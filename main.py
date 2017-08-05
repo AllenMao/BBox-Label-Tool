@@ -3,6 +3,7 @@ import tkinter.messagebox
 from PIL import Image, ImageTk
 import numpy as np
 import os
+import os.path
 import glob
 import random
 import xml.etree.ElementTree as ET
@@ -77,7 +78,9 @@ class LabelTool():
 
         # choose class
         self.classname = StringVar()
-        self.classcandidate = ttk.Combobox(self.frame, state='readonly', textvariable=self.classname)
+        self.classcandidate = ttk.Combobox(self.frame,
+                                           state='readonly',
+                                           textvariable=self.classname)
         self.classcandidate.grid(row=1, column=2)
         if os.path.exists(self.classcandidate_filename):
             with open(self.classcandidate_filename) as cf:
@@ -86,7 +89,9 @@ class LabelTool():
         self.classcandidate['values'] = self.cla_can_temp
         self.classcandidate.current(0)
         self.currentLabelclass = self.classcandidate.get()
-        self.btnclass = Button(self.frame, text='ComfirmClass', command=self.setClass)
+        self.btnclass = Button(self.frame,
+                               text='ComfirmClass',
+                               command=self.setClass)
         self.btnclass.grid(row=2, column=2, sticky=W+E)
 
         # showing bbox info & delete bbox
@@ -96,15 +101,18 @@ class LabelTool():
         self.listbox.grid(row=4, column=2, sticky=N)
         self.btnDel = Button(self.frame, text='Delete', command=self.delBBox)
         self.btnDel.grid(row=5, column=2, sticky=W+E+N)
-        self.btnClear = Button(self.frame, text='ClearAll', command=self.clearBBox)
+        self.btnClear = Button(self.frame, text='ClearAll',
+                               command=self.clearBBox)
         self.btnClear.grid(row=6, column=2, sticky=W+E+N)
 
         # control panel for image navigation
         self.ctrPanel = Frame(self.frame)
         self.ctrPanel.grid(row=7, column=1, columnspan=2, sticky=W+E)
-        self.prevBtn = Button(self.ctrPanel, text='<< Prev', width=10, command=self.prevImage)
+        self.prevBtn = Button(self.ctrPanel, text='<< Prev',
+                              width=10, command=self.prevImage)
         self.prevBtn.pack(side=LEFT, padx=5, pady=3)
-        self.nextBtn = Button(self.ctrPanel, text='Next >>', width=10, command=self.nextImage)
+        self.nextBtn = Button(self.ctrPanel, text='Next >>',
+                              width=10, command=self.nextImage)
         self.nextBtn.pack(side=LEFT, padx=5, pady=3)
         self.progLabel = Label(self.ctrPanel, text="Progress:     /    ")
         self.progLabel.pack(side=LEFT, padx=5)
@@ -141,7 +149,8 @@ class LabelTool():
             s = r'D:\workspace\python\labelGUI'
         # get image list
         self.imageDir = os.path.join(r'./Images', '%03d' % (self.category))
-        self.imageList = [f for f in glob.glob(os.path.join(self.imageDir + '/*')) if ('png'in f or 'jpg' in f)]
+        self.imageList = [f for f in glob.glob(
+            os.path.join(self.imageDir + '/*')) if ('png'in f or 'jpg' in f)]
 
         if len(self.imageList) == 0:
             print('No .JPEG images found in the specified dir!')
@@ -172,7 +181,8 @@ class LabelTool():
             new_size = int(r * im.size[0]), int(r * im.size[1])
             self.tmp.append(im.resize(new_size, Image.ANTIALIAS))
             self.egList.append(ImageTk.PhotoImage(self.tmp[-1]))
-            self.egLabels[i].config(image=self.egList[-1], width=SIZE[0], height=SIZE[1])
+            self.egLabels[i].config(image=self.egList[-1],
+                                    width=SIZE[0], height=SIZE[1])
 
         self.loadImage()
         print(('{0} images loaded from {1}'.format(self.total, s)))
@@ -183,7 +193,8 @@ class LabelTool():
         self.img = Image.open(imagepath)
         self.imagesize = np.asarray(self.img).shape
         self.tkimg = ImageTk.PhotoImage(self.img)
-        self.mainPanel.config(width=max(self.tkimg.width(), 400), height=max(self.tkimg.height(), 400))
+        self.mainPanel.config(width=max(self.tkimg.width(), 400),
+                              height=max(self.tkimg.height(), 400))
         self.mainPanel.create_image(0, 0, image=self.tkimg, anchor=NW)
         self.progLabel.config(text="%04d/%04d" % (self.cur, self.total))
 
@@ -205,27 +216,34 @@ class LabelTool():
                 for obj in xmlroot.iter('object'):
                     cls = obj.find('name').text
                     xmlbox = obj.find('bndbox')
-                    bbox = (float(xmlbox.find('xmin').text),
-                            float(xmlbox.find('ymin').text),
-                            float(xmlbox.find('xmax').text),
-                            float(xmlbox.find('ymax').text),
+                    bbox = (int(xmlbox.find('xmin').text),
+                            int(xmlbox.find('ymin').text),
+                            int(xmlbox.find('xmax').text),
+                            int(xmlbox.find('ymax').text),
                             cls
                             )
                     self.bboxList.append(bbox)
-                    tmpId = self.mainPanel.create_rectangle(bbox[0], bbox[1],
-                                                            bbox[2], bbox[3],
-                                                            width=2,
-                                                            outline=COLORS[(len(self.bboxList)-1) % len(COLORS)])
+                    tmpId = self.mainPanel.create_rectangle(
+                        bbox[0], bbox[1], bbox[2], bbox[3],
+                        width=2,
+                        outline=COLORS[(len(self.bboxList)-1) % len(COLORS)]
+                        )
                     self.bboxIdList.append(tmpId)
-                    self.listbox.insert(END, '%s: (%d, %d) -> (%d, %d)' % (cls, bbox[0], bbox[1], bbox[2], bbox[3]))
-                    self.listbox.itemconfig(len(self.bboxIdList) - 1, fg=COLORS[(len(self.bboxIdList) - 1) % len(COLORS)])
+                    self.listbox.insert(
+                        END,
+                        '{0}: ({1}, {2}) -> ({3}, {4})'.format(
+                            cls, bbox[0], bbox[1], bbox[2], bbox[3]))
+                    self.listbox.itemconfig(
+                        len(self.bboxIdList) - 1,
+                        fg=COLORS[(len(self.bboxIdList) - 1) % len(COLORS)])
 
     def saveImage(self):
         annotation = ET.Element('annotation')
         folder = ET.SubElement(annotation, 'folder')
-        folder.text = self.imageDir
+        folder.text = os.path.basename(self.imageDir)
         filename = ET.SubElement(annotation, 'filename')
-        filename.text = os.path.split(self.imageList[self.cur - 1])[-1].split('.')[0] + '.jpg'
+        filename.text = os.path.split(
+            self.imageList[self.cur - 1])[-1].split('.')[0] + '.jpg'
         size = ET.SubElement(annotation, 'size')
         width = ET.SubElement(size, 'width')
         width.text = str(int(self.imagesize[0]))
@@ -257,16 +275,19 @@ class LabelTool():
         if self.STATE['click'] == 0:
             self.STATE['x'], self.STATE['y'] = event.x, event.y
         else:
-            x1, x2 = min(self.STATE['x'], event.x), max(self.STATE['x'], event.x)
-            y1, y2 = min(self.STATE['y'], event.y), max(self.STATE['y'], event.y)
+            x1 = min(self.STATE['x'], event.x)
+            x2 = max(self.STATE['x'], event.x)
+            y1 = min(self.STATE['y'], event.y)
+            y2 = max(self.STATE['y'], event.y)
             self.bboxList.append((x1, y1, x2, y2, self.currentLabelclass))
             self.bboxIdList.append(self.bboxId)
             self.bboxId = None
-            self.listbox.insert(END,
-                                '%s: (%d, %d) -> (%d, %d)' % (self.currentLabelclass,
-                                                              x1, y1, x2, y2))
-            self.listbox.itemconfig(len(self.bboxIdList) - 1,
-                                    fg=COLORS[(len(self.bboxIdList)-1) % len(COLORS)])
+            self.listbox.insert(
+                END, '{0}: ({1}, {2}) -> ({3}, {4})'.format(
+                    self.currentLabelclass, x1, y1, x2, y2))
+            self.listbox.itemconfig(
+                len(self.bboxIdList) - 1, fg=COLORS[(
+                    len(self.bboxIdList)-1) % len(COLORS)])
         self.STATE['click'] = 1 - self.STATE['click']
 
     def mouseMove(self, event):
@@ -285,12 +306,10 @@ class LabelTool():
         if 1 == self.STATE['click']:
             if self.bboxId:
                 self.mainPanel.delete(self.bboxId)
-            self.bboxId = self.mainPanel.create_rectangle(self.STATE['x'], self.STATE['y'],
-                                                          event.x, event.y,
-                                                          width=2,
-                                                          outline=COLORS[len(
-                                                            self.bboxList) % len(COLORS)]
-                                                          )
+            self.bboxId = self.mainPanel.create_rectangle(
+                self.STATE['x'], self.STATE['y'],
+                event.x, event.y, width=2,
+                outline=COLORS[len(self.bboxList) % len(COLORS)])
 
     def cancelBBox(self, event):
         if 1 == self.STATE['click']:
