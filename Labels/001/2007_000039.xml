@@ -1,0 +1,19 @@
+<?xml version="1.0" ?>
+<annotation>
+  <folder>001</folder>
+  <filename>2007_000039.jpg</filename>
+  <size>
+    <width>375</width>
+    <height>500</height>
+    <depth>3</depth>
+  </size>
+  <object>
+    <name>tvmonitor</name>
+    <bndbox>
+      <xmin>156</xmin>
+      <ymin>89</ymin>
+      <xmax>344</xmax>
+      <ymax>279</ymax>
+    </bndbox>
+  </object>
+</annotation>
