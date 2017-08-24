@@ -249,8 +249,13 @@ class LabelTool():
         width.text = str(int(self.imagesize[0]))
         height = ET.SubElement(size, 'height')
         height.text = str(int(self.imagesize[1]))
+        if len(self.imagesize) == 3:
+           is_gray = False
         depth = ET.SubElement(size, 'depth')
-        depth.text = str(int(self.imagesize[2]))
+        if is_gray:
+            depth.text = str(1)
+        else:
+            depth.text = str(int(self.imagesize[2]))
         for bbox in self.bboxList:
             obj = ET.SubElement(annotation, 'object')
             name = ET.SubElement(obj, 'name')
