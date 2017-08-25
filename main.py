@@ -249,8 +249,9 @@ class LabelTool():
         width.text = str(int(self.imagesize[0]))
         height = ET.SubElement(size, 'height')
         height.text = str(int(self.imagesize[1]))
-        if len(self.imagesize) == 3:
-           is_gray = False
+        is_gray = False
+        if len(self.imagesize) == 2:
+           is_gray = True
         depth = ET.SubElement(size, 'depth')
         if is_gray:
             depth.text = str(1)
