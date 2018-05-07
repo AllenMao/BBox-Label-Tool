@@ -246,9 +246,9 @@ class LabelTool():
             self.imageList[self.cur - 1])[-1].split('.')[0] + '.jpg'
         size = ET.SubElement(annotation, 'size')
         width = ET.SubElement(size, 'width')
-        width.text = str(int(self.imagesize[0]))
+        width.text = str(int(self.imagesize[1]))
         height = ET.SubElement(size, 'height')
-        height.text = str(int(self.imagesize[1]))
+        height.text = str(int(self.imagesize[0]))
         is_gray = False
         if len(self.imagesize) == 2:
            is_gray = True
